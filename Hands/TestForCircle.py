@@ -38,37 +38,32 @@ def DragWithHand():
     if dete.itsACloseHand():
         #ms.drag(x_start,y_start,end_x,end_y)
         pass
+
     else:
         ms.move(end_x, end_y)
 
 def func3():
     print("func3 as been execute")
-def run_program():
-    pTime = 0
-    cTime = 0
-    while True:
-        success, img = cap.read()
 
-        cTime = time.time()
-        fps = 1 / (cTime - pTime)
-        pTime = cTime
-
-        img = dete.findHands(img)
-        lmList= dete.findPosition(img)
-        if len(lmList) != 0:
-            #freeDraw()
-            DragWithHand()
-
-
-
-        cv2.putText(img, str(int(fps)), (10, 70), cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 255), 3)
-
-        cv2.imshow("Image", img)
-        #cv2.imshow("Imagetodraw",imgToDraw)
-        cv2.waitKey(1)
+pTime = 0
+cTime = 0
 
 while True:
-    a = input("\n>")
-    if a == "y":
-        print(a)
-        run_program()
+    success, img = cap.read()
+
+    cTime = time.time()
+    fps = 1 / (cTime - pTime)
+    pTime = cTime
+
+    img = dete.findHands(img)
+    lmList= dete.findPosition(img)
+    if len(lmList) != 0:
+        DragWithHand()
+
+
+
+    cv2.putText(img, str(int(fps)), (10, 70), cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 255), 3)
+
+    cv2.imshow("Image", img)
+    #cv2.imshow("Imagetodraw",imgToDraw)
+    cv2.waitKey(1)

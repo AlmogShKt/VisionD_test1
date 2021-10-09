@@ -22,8 +22,10 @@ class HandDetector():  # Setting the class
         self.SratTime = time.time()  # Setting the beginning run time. use for claca. in 'itsACloseHand'
         self.removefiles()
 
-    def removefiles(self):
+    def get_star_time(self):
+        return self.SratTime
 
+    def removefiles(self):
         files = glob.glob("C:\\Users\\ashta\\PycharmProjects\\VisionD_test1\\screenshots\\*")
         if len(files) > 0:
             for f in files:
@@ -40,13 +42,11 @@ class HandDetector():  # Setting the class
         return img
 
     def findPosition(self, img, handNo=0, draw=True): # finding and converting the hand location in the img
-
         self.lmList = []
 
         if self.results.multi_hand_landmarks:
             myHans = self.results.multi_hand_landmarks[handNo]
             for id, lm in enumerate(myHans.landmark):
-
                 lmX = lm.x  # landmark X axes
                 lmY = lm.y  # landmark Y axes
                 h, w, c = img.shape
@@ -58,20 +58,15 @@ class HandDetector():  # Setting the class
                         yHandCenter = int((self.lmList[9][2] + self.lmList[0][2]) / 2)
                         self.HCP = (xHandCenter, yHandCenter)
                         cv2.circle(img, (self.HCP), 7, (255, 0, 255), cv2.FILLED)  # Circel the center of the hand
-
         return self.lmList
 
-    def getHCP(self):
+    def getHCP(self):#return the Hand Center Position
        # self.countForAVG = self.countForAVG + 1
         # print(self.countForAVG)
         return self.HCP
 
     def disBetFin(self, f1, f2):
         return ((((f2[0] - f1[0]) ** 2) + ((f2[1] - f1[1]) ** 2)) ** 0.5)
-
-
-
-
     def under5sec(self):
         if self.FristTimeIn:
             self.SratTime = time.time()
@@ -121,7 +116,7 @@ class HandDetector():  # Setting the class
 
         if self.disBetFin(self.f4, self.f8) < 50 and self.disBetFin(self.f8, self.f12) < 30 and self.disBetFin(self.f12,self.f16) < 25 and self.disBetFin(
                                                                                     self.f16, self.f20) < 25 and self.disBetFin(self.f4, self.f20) < 83:
-            #print(f"Your Hand is Close!")
+            print(f"Your Hand is Close!")
             return True
         else:  # In case the hand is open
             if self.disBetFin(self.f9, self.f0) > 160 or self.disBetFin(self.f9,self.f0) < 65:  # if the hand is open, check if is too far or too close to the camera
@@ -134,7 +129,6 @@ class HandDetector():  # Setting the class
             else:
                 self.FristTimeIn = True
             return False
-
 
 def main():
     pTime = 0
